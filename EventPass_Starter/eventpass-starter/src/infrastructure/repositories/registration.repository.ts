@@ -11,12 +11,10 @@ import { AppError } from "../../shared/errors/AppError.js";
 
 export class RegistrationRepository {
   async findById(id: number): Promise<RegistrationWithSession | null> {
-    // TODO: implementar operação de persistência.
-    throw new AppError(
-      501,
-      "NOT_IMPLEMENTED",
-      "Operação ainda não implementada.",
-    );
+    return prisma.registration.findUnique({
+      where: { id },
+      include: { session: true },
+    });
   }
 
   async findAttendee(id: number): Promise<Attendee | null> {
@@ -67,15 +65,13 @@ export class RegistrationRepository {
   }
 
   async update(id: number, data: UpdateRegistration): Promise<Registration> {
-    throw new AppError(
-      501,
-      "NOT_IMPLEMENTED",
-      "Operação ainda não implementada.",
-    );
+    return prisma.registration.update({
+      where: { id },
+      data: { sessionId: data.sessionId },
+    });
   }
 
   async delete(id: number): Promise<void> {
-    // TODO: implementar operação de persistência.
     throw new AppError(
       501,
       "NOT_IMPLEMENTED",
