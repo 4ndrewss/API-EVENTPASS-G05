@@ -41,9 +41,10 @@ export class RegistrationController {
   };
 
   delete = async (req: Request, res: Response): Promise<void> => {
-    res.status(501).json({
-      error: "NOT_IMPLEMENTED",
-      message: "Endpoint ainda não implementado.",
-    });
+    const { id } = registrationIdParamSchema.parse(req.params);
+
+    await this.service.delete(id);
+
+    res.status(204).send();
   };
 }
