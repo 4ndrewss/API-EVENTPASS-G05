@@ -57,6 +57,6 @@ model Registration {
   attendee   Attendee @relation(fields: [attendeeId], references: [id], onDelete: Restrict)
   session    Session  @relation(fields: [sessionId], references: [id], onDelete: Restrict)
 
-  @@unique([attendeeId, sessionId]) //erro 2, falta disso
+  @@unique([attendeeId, sessionId]) //erro 2, faltava disso
   @@index([sessionId])
 }
