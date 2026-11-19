@@ -160,10 +160,20 @@ export class RegistrationService {
   }
 
   async delete(id: number): Promise<void> {
-    throw new AppError(
-      501,
-      "NOT_IMPLEMENTED",
-      "Funcionalidade ainda não implementada.",
-    );
+    const registration = await this.repo.findById(id);
+
+    if (!registration) {
+      throw new AppError(404, "REGISTRATION_NOT_FOUND", "Inscrição não encontrada.");
+    }
+
+    if (registration.session.startAt <= new Date()) {
+      throw new AppError(
+        409,
+        "SESSION_STARTED",
+        "Não é possível cancelar a inscrição pois a sessão já iniciou."
+      );
+    }
+
+    await this.repo.delete(id);
   }
 }

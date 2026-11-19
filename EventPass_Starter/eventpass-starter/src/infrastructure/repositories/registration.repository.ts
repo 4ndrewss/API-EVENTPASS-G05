@@ -1,13 +1,10 @@
-import type { Session, Event, Registration, Attendee } from "@prisma/client";
+import type { Registration, Attendee } from "@prisma/client";
 import type {
-  SessionFilters,
-  SessionWithCount,
   RegistrationWithSession,
   CreateRegistration,
   UpdateRegistration,
 } from "../../shared/types.js";
 import { prisma } from "../prisma/index.js";
-import { AppError } from "../../shared/errors/AppError.js";
 
 export class RegistrationRepository {
   async findById(id: number): Promise<RegistrationWithSession | null> {
@@ -72,10 +69,8 @@ export class RegistrationRepository {
   }
 
   async delete(id: number): Promise<void> {
-    throw new AppError(
-      501,
-      "NOT_IMPLEMENTED",
-      "Operação ainda não implementada.",
-    );
+    await prisma.registration.delete({
+      where: { id },
+    });
   }
 }
