@@ -1,14 +1,17 @@
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
+import { z } from 'zod';
 import { EventService } from '../../infrastructure/services/event.service.js';
 
-export class EventController {
-  private service = new EventService();
+const occupancyParamsSchema = z.object({
+  eventId: z.coerce.number().int().positive()
+});
 
-  occupancy = async (req: Request, res: Response): Promise<void> => {
-    // TODO: validar entrada, chamar o service e devolver a resposta HTTP.
-    res.status(501).json({
-      error: 'NOT_IMPLEMENTED',
-      message: 'Endpoint ainda não implementado.'
-    });
+export class EventController {
+  private eventService = new EventService();
+
+  occupancy = async (req: Request, res: Response) => {
+    const { eventId } = occupancyParamsSchema.parse(req.params);
+    const occupancyData = await this.eventService.occupancy(eventId);
+    return res.status(200).json(occupancyData);
   };
 }

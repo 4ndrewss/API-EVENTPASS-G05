@@ -1,22 +1,27 @@
-import type { Session, Event, Registration, Attendee } from '@prisma/client';
+import type { Event } from '@prisma/client';
 import type {
-  SessionFilters,
-  SessionWithCount,
-  RegistrationWithSession,
-  CreateRegistration,
-  UpdateRegistration
+  SessionWithCount
 } from '../../shared/types.js';
 import { prisma } from '../prisma/index.js';
-import { AppError } from '../../shared/errors/AppError.js';
 
 export class EventRepository {
   async findById(id: number): Promise<Event | null> {
-    // TODO: implementar operação de persistência.
-    throw new AppError(501, 'NOT_IMPLEMENTED', 'Operação ainda não implementada.');
+    return await prisma.event.findUnique({
+      where: { id }
+    });
   }
 
   async sessionsWithCounts(eventId: number): Promise<SessionWithCount[]> {
-    // TODO: implementar operação de persistência.
-    throw new AppError(501, 'NOT_IMPLEMENTED', 'Operação ainda não implementada.');
+    return await prisma.session.findMany({
+      where: {
+        eventId,
+        status: { not: 'CANCELLED' }
+      },
+      include: {
+        _count: {
+          select: { registrations: true }
+        }
+      }
+    });
   }
 }
